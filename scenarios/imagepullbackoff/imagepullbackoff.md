@@ -202,7 +202,3 @@ kubectl get pods -w
 
 ---
 
-## Related scenarios
-
-- [CrashLoopBackOff](../crashloopbackoff/crashloopbackoff-runbook.md) — container starts but crashes repeatedly
-- [OOMKilled](../oomkilled/oomkilled-runbook.md) — exit code 137, memory limit exceeded
