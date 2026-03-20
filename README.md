@@ -14,15 +14,6 @@ This repo documents my hands-on Kubernetes troubleshooting practice. Every scena
 
 ---
 
-## Scenarios
-
-| Scenario | Status | What it covers |
-|---|---|---|
-| [CrashLoopBackOff](scenarios/crashloopbackoff/crashloopbackoff-runbook.md) | Done | Container exits repeatedly, exit codes, --previous flag |
-| [ImagePullBackOff](scenarios/imagepullbackoff/imagepullbackoff-runbook.md) | Done | Invalid image tag, Events section, rollout fix |
-| OOMKilled | In progress | Memory limit exceeded, exit code 137 |
-| Pending pod | Planned | Insufficient resources, node capacity |
-
 ---
 
 ## Diagnostic methodology
@@ -45,29 +36,6 @@ The key instinct — never restart before you understand why it failed. Restarti
 
 ## Repo structure
 
-```
-k8s-cloud-troubleshooting/
-├── README.md
-└── scenarios/
-    ├── crashloopbackoff/
-    │   ├── crashloopbackoff-runbook.md
-    │   ├── crasher-pod.yaml
-    │   ├── healthy-pod.yaml
-    │   └── screenshots/
-    │       ├── 01-crashloopbackoff-watch.jpg
-    │       ├── 02-describe-pod-exitcode-events.jpg
-    │       ├── 03-logs-previous-flag.jpg
-    │       └── 04-healthy-pod-running.jpg
-    └── imagepullbackoff/
-        ├── imagepullbackoff-runbook.md
-        ├── bad-image-demo.yaml
-        └── screenshots/
-            ├── 01-yaml-invalid-image.jpg
-            ├── 02-pod-status-imagepullbackoff.jpg
-            ├── 03-describe-pod-image-error.jpg
-            ├── 04-apply-fixed-yaml.jpg
-            ├── 05-rollout-success.jpg
-            └── 06-pod-running.jpg
 ```
 
 ---
