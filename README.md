@@ -34,20 +34,6 @@ The key instinct — never restart before you understand why it failed. Restarti
 
 ---
 
-## Repo structure
-
-```
-
----
-
-## Environment
-
-- Minikube on Windows
-- kubectl CLI
-- busybox and nginx images for lab simulation
-
----
-
 ## Key learnings so far
 
 **`--previous` flag** — without this flag you see empty logs from the freshly restarted container. `kubectl logs --previous` retrieves logs from the last crashed instance. That is where the evidence lives.
@@ -59,7 +45,3 @@ The key instinct — never restart before you understand why it failed. Restarti
 **Fix the cause not the symptom** — deleting and redeploying without fixing the underlying issue starts the loop again immediately.
 
 ---
-
-## In progress
-
-Adding OOMKilled and Pending pod scenarios this week. Each will follow the same structure — simulate, diagnose, screenshot, document.
