@@ -143,6 +143,12 @@ kubectl logs <pod-name> -f
 
 ### 01 — CrashLoopBackOff forming
 
+![CrashLoopBackOff watch](screenshots/00-crasher-yaml.jpg)
+
+crasher.yaml file.
+
+### 02 — CrashLoopBackOff forming
+
 ![CrashLoopBackOff watch](screenshots/01-crashloopbackoff-watch.jpg)
 
 `kubectl get pods -w` showing STATUS cycling and RESTARTS climbing.
