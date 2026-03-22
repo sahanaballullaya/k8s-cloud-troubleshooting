@@ -3,7 +3,7 @@
 **Scope:** Kubernetes pod killed due to memory limit exceeded  
 **Environment:** Minikube lab  
 **Author:** Sahana  
-**Last updated:** 2026-03-20
+**Last updated:** 2026-03-22
 
 ---
 
@@ -184,41 +184,57 @@ Limits:
 
 ## Screenshots
 
-### 01 — OOMKilled forming
+### 01 — OOM deployment YAML (broken)
 
-![OOMKilled watch](screenshots/01-oomkilled-watch.jpg)
+![OOM YAML file](screenshots/01-oom-yaml-file.jpg)
+
+Deployment YAML with memory limit set to 50Mi — deliberately too low to trigger OOMKilled.
+
+---
+
+### 02 — OOMKilled forming
+
+![OOMKilled watch](screenshots/02-oomkilled-watch.jpg)
 
 `kubectl get pods -w` showing STATUS cycling through OOMKilled and into CrashLoopBackOff with RESTARTS climbing.
 
 ---
 
-### 02 — Describe pod output
+### 03 — Describe pod output
 
-![Describe pod OOMKilled](screenshots/02-describe-pod-oomkilled.jpg)
+![Describe pod OOMKilled](screenshots/03-describe-pod-oomkilled.jpg)
 
 `kubectl describe pod` showing Reason: OOMKilled, Exit Code, and memory limits. The Reason field is the definitive evidence.
 
 ---
 
-### 03 — Logs from crashed container
+### 04 — Logs from crashed container
 
-![Logs previous OOM](screenshots/03-logs-previous-oom.jpg)
+![Logs previous OOM](screenshots/04-logs-previous-oom.jpg)
 
 `kubectl logs --previous` showing signal 9 in the stress output. Signal 9 is SIGKILL — the kernel terminated the process.
 
 ---
 
-### 04 — Node memory
+### 05 — Node memory
 
-![Describe node memory](screenshots/04-describe-node-memory.jpg)
+![Describe node memory](screenshots/05-describe-node-memory.jpg)
 
 `kubectl describe node` showing allocated memory across all pods on the node.
 
 ---
 
-### 05 — Healthy pod running after fix
+### 06 — Healthy deployment YAML (fixed)
 
-![Healthy memory running](screenshots/05-healthy-memory-running.jpg)
+![Healthy deployment YAML](screenshots/06-healthy-deployment-yaml.jpg)
+
+Deployment YAML after fix with memory limit increased to 200Mi.
+
+---
+
+### 07 — Healthy pod running after fix
+
+![Healthy memory running](screenshots/07-healthy-memory-running.jpg)
 
 `kubectl get pods -w` after increasing memory limit showing STATUS: Running and RESTARTS: 0.
 
@@ -232,13 +248,21 @@ minikube start
 
 # Deploy pod with memory limit too low
 kubectl apply -f oom-deployment.yaml
+# Screenshot: 01-oom-yaml-file
 
 # Observe failure
 kubectl get pods -w
+# Screenshot: 02-oomkilled-watch
 
 # Diagnose
 kubectl describe pod <pod-name>
+# Screenshot: 03-describe-pod-oomkilled
+
 kubectl logs <pod-name> --previous
+# Screenshot: 04-logs-previous-oom
+
+kubectl describe node
+# Screenshot: 05-describe-node-memory
 
 # Save evidence
 kubectl logs <pod-name> --previous > oom-previous.log
@@ -248,9 +272,12 @@ kubectl describe node > node-describe.txt
 # Fix — increase memory limit
 kubectl edit deployment oom-killer
 # Change 50Mi to 200Mi, save and exit
+# Screenshot: 06-healthy-deployment-yaml
 
 # Verify
 kubectl get pods -w
+# Screenshot: 07-healthy-memory-running
+
 kubectl describe pod <new-pod-name>
 ```
 
