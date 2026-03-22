@@ -141,11 +141,11 @@ kubectl logs <pod-name> -f
 
 ## Screenshots
 
-### 01 — CrashLoopBackOff forming
+### 01 — Crasher YAML file
 
 ![CrashLoopBackOff watch](screenshots/00-crasher-yaml.jpg)
 
-crasher.yaml file.
+Deployment file with restartPolicy as Always and Busybox image.
 
 ### 02 — CrashLoopBackOff forming
 
