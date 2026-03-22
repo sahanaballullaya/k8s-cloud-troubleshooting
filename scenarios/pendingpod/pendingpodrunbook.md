@@ -57,7 +57,7 @@ Scroll to the Events section at the bottom:
 Events:
   Type     Reason            Age   From               Message
   ----     ------            ----  ----               -------
-  Warning  FailedScheduling  32s   default-scheduler  0/1 nodes are available: 1 Insufficient cpu, 1 Insufficient memory. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+  Warning  FailedScheduling  32s   default-scheduler  0/1 nodes are available: 1 Insufficient memory. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
 ```
 
 **FailedScheduling is your smoking gun.** The scheduler is telling you exactly what it checked and why it failed. Read the message carefully — it tells you how many nodes exist and what resource was insufficient.
@@ -74,25 +74,7 @@ The request tells you what the pod asked for. If no node has that capacity it wi
 
 ---
 
-### Step 3 — Check node resource allocation
-
-```bash
-kubectl describe node <node-name>
-```
-
-Scroll to the Allocated resources section:
-
-```
-Namespace   Name                               CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
----------   ----                               ------------  ----------  ---------------  -------------  ---
-default     pending-pod-6456d5cb8c-ndrtm       1 (6%)        0 (0%)      64Mi (0%)        0 (0%)         8m
-```
-
-This shows exactly how much CPU and memory is already allocated on the node versus total capacity. Compare this against what the pod is requesting.
-
----
-
-### Step 4 — Save evidence
+### Step 3 — Save evidence
 
 ```bash
 kubectl describe pod <pod-name> > pending-describe.txt
@@ -124,7 +106,7 @@ To:
 resources:
   requests:
     memory: "64Mi"    # to this
-    cpu: "1"          # and this
+    cpu: "100m"       # and this
 ```
 
 Save and exit. Kubernetes automatically creates a new pod with the updated requests.
@@ -145,7 +127,7 @@ Look for:
 
 ```
 Requests:
-  cpu:     1
+  cpu:     100m
   memory:  64Mi
 ```
 
@@ -169,7 +151,7 @@ Requests:
 
 ![Pending pod YAML](screenshots/01-pendingpod-yaml.jpg)
 
-Deployment YAML with resource requests set to 9999 CPU and 9999Gi memory — values no node can satisfy.
+Deployment YAML with resource requests set to 9999Gi memory — values no node can satisfy.
 
 ---
 
@@ -193,7 +175,7 @@ Deployment YAML with resource requests set to 9999 CPU and 9999Gi memory — val
 
 ![Updated YAML file](screenshots/04-updated_yaml_file.jpg)
 
-Deployment YAML after fix — memory reduced to 64Mi and CPU reduced to 1.
+Deployment YAML after fix — memory reduced to 64Mi and CPU set to 100m.
 
 ---
 
@@ -243,7 +225,7 @@ kubectl describe node <node-name> > node-describe.txt
 
 # Fix — reduce resource requests
 kubectl edit deployment pending-pod
-# Change 9999 CPU and 9999Gi memory to 1 CPU and 64Mi, save and exit
+# Change 9999Gi memory to 64Mi and 100m CPU, save and exit
 
 # Verify
 kubectl get pods
